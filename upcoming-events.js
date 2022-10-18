@@ -7,11 +7,7 @@ function getEvents(){
 
 
 
-let eventosFuturos = getEvents().filter(function (event) {
-    if (event.date >= fechaActual) {
-      return event
-    }
-  });
+let eventosFuturos = getEvents().filter(event => event.date >= fechaActual)
 
 let container = document.getElementById("container");
 
@@ -47,3 +43,26 @@ inputSearch.addEventListener("input", function (event) {
   container.innerHTML = ``
   aux.forEach(imprimirCartas)
 }) 
+
+let check = document.querySelectorAll('.form-check-input')
+for (let element of check) {
+  element.addEventListener(
+    'click',
+    () => search(eventosFuturos)
+  )
+}
+
+function search (eventosFuturos){
+  let checks = document.querySelectorAll('.form-check-input:checked')
+  let filterArray = []
+  checks.forEach(categoria => {
+    let newArray = eventosFuturos.filter(evento => evento.category===categoria.value)
+    filterArray = filterArray.concat(newArray)
+  })
+  console.log(filterArray)
+  if (filterArray.length === 0){
+    filterArray = eventosFuturos
+  }
+  container.innerHTML = ``;
+  filterArray.forEach(imprimirCartas)
+}
