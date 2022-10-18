@@ -33,9 +33,6 @@ let container = document.getElementById("container");
 
 getEvents().forEach(imprimirCartas)
 
-
-
-
 const inputSearch = document.getElementById("js-search");
 inputSearch.addEventListener("input", function (event) {
   let aux = getEvents().filter((evento) =>
