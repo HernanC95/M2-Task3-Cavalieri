@@ -1,14 +1,13 @@
-
-let fechaActual = data.currentDate
-let eventos = data.events
+let fechaActual = data.currentDate;
+let eventos = data.events;
 console.log(eventos);
 
-function getEvents(){
-  return data.events
+function getEvents() {
+  return data.events;
 }
 
 let container = document.getElementById("container");
-let todosLosEventos = getEvents().forEach(imprimirCartas)
+/* let todosLosEventos = getEvents().forEach(imprimirCartas) */
 function imprimirCartas(carta) {
   let article = document.createElement("article");
   article.innerHTML += `    <div class="card h-100" style="width: 18rem">
@@ -30,12 +29,40 @@ function imprimirCartas(carta) {
         </div>
       </div>
     </div>`;
-    container.appendChild(article);
+  container.appendChild(article);
 }
 
-const inputSearch = document.getElementById ("js-search")
+const inputSearch = document.getElementById("js-search");
 inputSearch.addEventListener("input", function (event) {
- let aux = getEvents().filter((evento) => evento.name.toLowerCase().includes(event.target.value.toLowerCase()))
-  container.innerHTML = ``
-  aux.forEach(imprimirCartas)
-}) 
+  let aux = getEvents().filter((evento) =>
+    evento.name.toLowerCase().includes(event.target.value.toLowerCase())
+  );
+  container.innerHTML = ``;
+  aux.forEach(imprimirCartas);
+});
+
+const arrayDeCheckboxIds = [
+  "foodfair",
+  "museum",
+  "costumeparty",
+  "musicconcert",
+  "race",
+  "bookexchange",
+  "cinema",
+];
+
+const checkBoxFF = document.getElementById("foodfair");
+
+checkBoxFF.addEventListener('change', function (evnt) {
+    if (evnt.target.checked){
+      getEvents().filter(function (event) {
+        if (event.category === "Food Fair") {
+          imprimirCartas(event);
+        }
+      })
+    }
+    else{
+      container.innerHTML = ``;
+    }
+})
+
