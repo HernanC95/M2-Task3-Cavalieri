@@ -1,13 +1,10 @@
 let fechaActual = data.currentDate;
 let eventos = data.events;
-console.log(eventos);
 
 function getEvents() {
   return data.events;
 }
 
-let container = document.getElementById("container");
-/* let todosLosEventos = getEvents().forEach(imprimirCartas) */
 function imprimirCartas(carta) {
   let article = document.createElement("article");
   article.innerHTML += `    <div class="card h-100" style="width: 18rem">
@@ -32,6 +29,13 @@ function imprimirCartas(carta) {
   container.appendChild(article);
 }
 
+let container = document.getElementById("container");
+
+getEvents().forEach(imprimirCartas)
+
+
+
+
 const inputSearch = document.getElementById("js-search");
 inputSearch.addEventListener("input", function (event) {
   let aux = getEvents().filter((evento) =>
@@ -41,28 +45,30 @@ inputSearch.addEventListener("input", function (event) {
   aux.forEach(imprimirCartas);
 });
 
-const arrayDeCheckboxIds = [
-  "foodfair",
-  "museum",
-  "costumeparty",
-  "musicconcert",
-  "race",
-  "bookexchange",
-  "cinema",
-];
+let todosLosEventos = getEvents();
+let check = document.querySelectorAll('.form-check-input')
+for (let element of check) {
+  element.addEventListener(
+    'click',
+    () => search(todosLosEventos)
+  )
+}
 
-const checkBoxFF = document.getElementById("foodfair");
+function search (todosLosEventos){
+  let checks = document.querySelectorAll('.form-check-input:checked')
+  let filterArray = []
+  checks.forEach(categoria => {
+    let newArray = todosLosEventos.filter(evento => evento.category===categoria.value)
+    filterArray = filterArray.concat(newArray)
+  })
+  console.log(filterArray)
+  if (filterArray.length === 0){
+    filterArray = todosLosEventos
+  }
+  container.innerHTML = ``;
+  filterArray.forEach(imprimirCartas)
+}
 
-checkBoxFF.addEventListener('change', function (evnt) {
-    if (evnt.target.checked){
-      getEvents().filter(function (event) {
-        if (event.category === "Food Fair") {
-          imprimirCartas(event);
-        }
-      })
-    }
-    else{
-      container.innerHTML = ``;
-    }
-})
+
+
 
