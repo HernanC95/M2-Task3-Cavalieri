@@ -50,3 +50,9 @@ th{
     padding: 12px;
     text-align: justify;
 }
+
+.img-details{
+    min-width: 18rem;
+    padding: 1rem;
+    object-fit: cover;
+}
