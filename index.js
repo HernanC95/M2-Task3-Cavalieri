@@ -4,7 +4,7 @@ let eventos = data.events;
 function getEvents() {
   return data.events;
 }
-
+let container = document.getElementById("container");
 function imprimirCartas(carta) {
   let article = document.createElement("article");
   article.innerHTML += `    <div class="card h-100" style="width: 18rem">
@@ -29,38 +29,47 @@ function imprimirCartas(carta) {
   container.appendChild(article);
 }
 
-let container = document.getElementById("container");
-
-getEvents().forEach(imprimirCartas)
+getEvents().forEach(imprimirCartas);
 
 const inputSearch = document.getElementById("js-search");
-inputSearch.addEventListener("input", function (event) {
-  let aux = getEvents().filter((evento) =>
-    evento.name.toLowerCase().includes(event.target.value.toLowerCase())
-  );
-  container.innerHTML = ``;
-  aux.forEach(imprimirCartas);
-});
 
-let todosLosEventos = getEvents();
-let check = document.querySelectorAll('.form-check-input')
-for (let element of check) {
-  element.addEventListener(
-    'click',
-    () => search(todosLosEventos)
-  )
+inputSearch.addEventListener("input", filtroCruzado);
+
+function filtrarTexto(array) {
+  let aux = array.filter((evento) =>
+    evento.name.toLowerCase().includes(inputSearch.value.toLowerCase())
+  );
+  return aux;
 }
 
-function search (todosLosEventos){
-  let checks = document.querySelectorAll('.form-check-input:checked')
-  let filterArray = []
-  checks.forEach(categoria => {
-    let newArray = todosLosEventos.filter(evento => evento.category===categoria.value)
-    filterArray = filterArray.concat(newArray)
-  })
-  if (filterArray.length === 0){
-    filterArray = todosLosEventos
+let check = document.querySelectorAll(".form-check-input");
+for (let element of check) {
+  element.addEventListener("click", filtroCruzado);
+}
+
+function checkbox() {
+  let checks = document.querySelectorAll(".form-check-input:checked");
+  let filterArray = [];
+  checks.forEach((categoria) => {
+    let newArray = getEvents().filter(
+      (evento) => evento.category === categoria.value
+    );
+    filterArray = filterArray.concat(newArray);
+  });
+  if (filterArray.length === 0) {
+    filterArray = getEvents();
   }
-  container.innerHTML = ``;
-  filterArray.forEach(imprimirCartas)
+  return filterArray;
+}
+
+function filtroCruzado() {
+  let arrayFiltradosPorCheck = checkbox();
+  let arraysFiltradosPorTexto = filtrarTexto(arrayFiltradosPorCheck);
+
+  if (arraysFiltradosPorTexto.length === 0) {
+    container.innerHTML = `<h2 class="text-white">No se encontraron Eventos</h2>`;
+  } else {
+    container.innerHTML = ``;
+    arraysFiltradosPorTexto.forEach(imprimirCartas);
+  }
 }
