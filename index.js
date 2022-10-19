@@ -22,7 +22,7 @@ function imprimirCartas(carta) {
           class="d-flex w-100 justify-content-between align-items-center"
         >
           <p class="m-0">Price: ${carta.price}</p>
-          <a href="#" class="btn btn-secondary">Details</a>
+          <a href="details.html?id=${carta._id}" class="btn btn-secondary">Details</a>
         </div>
       </div>
     </div>`;
@@ -58,14 +58,9 @@ function search (todosLosEventos){
     let newArray = todosLosEventos.filter(evento => evento.category===categoria.value)
     filterArray = filterArray.concat(newArray)
   })
-  console.log(filterArray)
   if (filterArray.length === 0){
     filterArray = todosLosEventos
   }
   container.innerHTML = ``;
   filterArray.forEach(imprimirCartas)
 }
-
-
-
-
