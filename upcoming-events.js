@@ -1,17 +1,14 @@
 let fechaActual = data.currentDate;
 let eventos = data.events;
-
-function getEvents(){
-  return data.events
+function getEvents() {
+  return data.events;
 }
-
-
-
-let eventosFuturos = getEvents().filter(event => event.date >= fechaActual)
 
 let container = document.getElementById("container");
 
-eventosFuturos.forEach(imprimirCartas)
+getEvents()
+  .filter((event) => event.date >= fechaActual)
+  .forEach(imprimirCartas);
 
 function imprimirCartas(carta) {
   let article = document.createElement("article");
@@ -37,32 +34,44 @@ function imprimirCartas(carta) {
   container.appendChild(article);
 }
 
-const inputSearch = document.getElementById ("js-search")
-inputSearch.addEventListener("input", function (event) {
- let aux =eventosFuturos. filter((evento) => evento.name.toLowerCase().includes(event.target.value.toLowerCase()))
-  container.innerHTML = ``
-  aux.forEach(imprimirCartas)
-}) 
+const inputSearch = document.getElementById("js-search");
+inputSearch.addEventListener("input", filtroCruzado);
 
-let check = document.querySelectorAll('.form-check-input')
-for (let element of check) {
-  element.addEventListener(
-    'click',
-    () => search(eventosFuturos)
-  )
+function filtrarTexto(array) {
+  let aux = array.filter((evento) =>
+    evento.name.toLowerCase().includes(inputSearch.value.toLowerCase())
+  );
+  return aux;
 }
 
-function search (eventosFuturos){
-  let checks = document.querySelectorAll('.form-check-input:checked')
-  let filterArray = []
-  checks.forEach(categoria => {
-    let newArray = eventosFuturos.filter(evento => evento.category===categoria.value)
-    filterArray = filterArray.concat(newArray)
-  })
-  console.log(filterArray)
-  if (filterArray.length === 0){
-    filterArray = eventosFuturos
+let check = document.querySelectorAll(".form-check-input");
+for (let element of check) {
+  element.addEventListener("click", filtroCruzado);
+}
+
+function checkbox() {
+  let eventosFuturos = getEvents().filter((event) => event.date >= fechaActual);
+  let checks = document.querySelectorAll(".form-check-input:checked");
+  let filterArray = [];
+  checks.forEach((categoria) => {
+    let newArray = eventosFuturos.filter(
+      (evento) => evento.category === categoria.value
+    );
+    filterArray = filterArray.concat(newArray);
+  });
+  if (filterArray.length === 0) {
+    filterArray = eventosFuturos;
   }
-  container.innerHTML = ``;
-  filterArray.forEach(imprimirCartas)
+  return filterArray;
+}
+function filtroCruzado() {
+  let arrayFiltradosPorCheck = checkbox();
+  let arraysFiltradosPorTexto = filtrarTexto(arrayFiltradosPorCheck);
+
+  if (arraysFiltradosPorTexto.length === 0) {
+    container.innerHTML = `<h2 class="text-white">No se encontraron Eventos</h2>`;
+  } else {
+    container.innerHTML = ``;
+    arraysFiltradosPorTexto.forEach(imprimirCartas);
+  }
 }
